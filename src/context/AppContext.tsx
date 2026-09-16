@@ -156,6 +156,26 @@ interface AppContextType {
   activeUserOrders: Order[];
 }
 
+const safeStorage = {
+  getItem: (key: string): string | null => {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  },
+  setItem: (key: string, val: string): void => {
+    try {
+      localStorage.setItem(key, val);
+    } catch {}
+  },
+  removeItem: (key: string): void => {
+    try {
+      localStorage.removeItem(key);
+    } catch {}
+  }
+};
+
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -166,7 +186,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Supabase Config
   const [supabaseConfig, setSupabaseConfigState] = useState<SupabaseConfig>(() => {
-    const saved = localStorage.getItem('wd_sb_cfg');
+    const saved = safeStorage.getItem('wd_sb_cfg');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -208,8 +228,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // POS State
   const [products, setProducts] = useState<Product[]>(() => {
-    const version = localStorage.getItem('wd_products_version');
-    const saved = localStorage.getItem('wd_products');
+    const version = safeStorage.getItem('wd_products_version');
+    const saved = safeStorage.getItem('wd_products');
     if (saved && version === 'v7_customization_drinks_155') {
       try {
         const parsed = JSON.parse(saved);
@@ -219,14 +239,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       } catch {}
     }
     // Update to newest default product catalog (all 155 items, rich drinks, coffee & sauces)
-    localStorage.setItem('wd_products', JSON.stringify(DEFAULT_PRODUCTS));
-    localStorage.setItem('wd_products_version', 'v7_customization_drinks_155');
+    safeStorage.setItem('wd_products', JSON.stringify(DEFAULT_PRODUCTS));
+    safeStorage.setItem('wd_products_version', 'v7_customization_drinks_155');
     return DEFAULT_PRODUCTS;
   });
 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [orders, setOrders] = useState<Order[]>(() => {
-    const saved = localStorage.getItem('wd_orders');
+    const saved = safeStorage.getItem('wd_orders');
     if (saved) {
       try { return JSON.parse(saved); } catch {}
     }
@@ -234,12 +254,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   });
 
   const [orderNo, setOrderNo] = useState<number>(() => {
-    const saved = localStorage.getItem('wd_order_no');
+    const saved = safeStorage.getItem('wd_order_no');
     return saved ? parseInt(saved, 10) : 1001;
   });
 
   const [inventory, setInventory] = useState<InventoryItem[]>(() => {
-    const saved = localStorage.getItem('wd_inventory');
+    const saved = safeStorage.getItem('wd_inventory');
     if (saved) {
       try { return JSON.parse(saved); } catch {}
     }
@@ -247,7 +267,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   });
 
   const [coupons, setCoupons] = useState<Coupon[]>(() => {
-    const saved = localStorage.getItem('wd_coupons');
+    const saved = safeStorage.getItem('wd_coupons');
     if (saved) {
       try { return JSON.parse(saved); } catch {}
     }
@@ -255,7 +275,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   });
 
   const [giftCards, setGiftCards] = useState<GiftCard[]>(() => {
-    const saved = localStorage.getItem('wd_gift_cards');
+    const saved = safeStorage.getItem('wd_gift_cards');
     if (saved) {
       try { return JSON.parse(saved); } catch {}
     }
@@ -263,7 +283,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   });
 
   const [posUsers, setPosUsers] = useState<PosUser[]>(() => {
-    const saved = localStorage.getItem('wd_pos_users');
+    const saved = safeStorage.getItem('wd_pos_users');
     if (saved) {
       try { 
         const parsed = JSON.parse(saved);
@@ -279,16 +299,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [currentPosUser, setCurrentPosUser] = useState<PosUser | null>(null);
 
   const [totalExpenses, setTotalExpenses] = useState<number>(() => {
-    const saved = localStorage.getItem('wd_expenses');
+    const saved = safeStorage.getItem('wd_expenses');
     return saved ? parseFloat(saved) : 0;
   });
 
   const [orderStopActive, setOrderStopActive] = useState<boolean>(() => {
-    return localStorage.getItem('wd_order_stop') === 'true';
+    return safeStorage.getItem('wd_order_stop') === 'true';
   });
 
   const [pickupClosed, setPickupClosed] = useState<boolean>(() => {
-    return localStorage.getItem('wd_pickup_closed') === 'true';
+    return safeStorage.getItem('wd_pickup_closed') === 'true';
   });
 
   const [appliedDiscount, setAppliedDiscount] = useState<{ type: string; val: number; code?: string; label: string }>({
@@ -299,7 +319,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Cash Payment Requests State (Cross-terminal sync)
   const [cashRequests, setCashRequests] = useState<CashPaymentRequest[]>(() => {
-    const saved = localStorage.getItem('wd_cash_requests');
+    const saved = safeStorage.getItem('wd_cash_requests');
     if (saved) {
       try { return JSON.parse(saved); } catch {}
     }
@@ -308,7 +328,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // WerkPay State
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>(() => {
-    const saved = localStorage.getItem('wd_bank_accounts');
+    const saved = safeStorage.getItem('wd_bank_accounts');
     if (saved) {
       try { return JSON.parse(saved); } catch {}
     }
@@ -319,7 +339,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [currentBankAccount, setCurrentBankAccount] = useState<BankAccount | null>(null);
 
   const [bankTransactions, setBankTransactions] = useState<BankTransaction[]>(() => {
-    const saved = localStorage.getItem('wd_bank_txs');
+    const saved = safeStorage.getItem('wd_bank_txs');
     if (saved) {
       try { return JSON.parse(saved); } catch {}
     }
@@ -335,7 +355,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   // Track order numbers placed in this session or browser
   const [myOrderNumbers, setMyOrderNumbers] = useState<number[]>(() => {
     try {
-      const saved = localStorage.getItem('wd_my_order_numbers');
+      const saved = safeStorage.getItem('wd_my_order_numbers');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -346,62 +366,62 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setMyOrderNumbers(prev => {
       if (prev.includes(num)) return prev;
       const updated = [num, ...prev];
-      try {
-        localStorage.setItem('wd_my_order_numbers', JSON.stringify(updated));
-      } catch {
-        // ignore storage errors
-      }
+      safeStorage.setItem('wd_my_order_numbers', JSON.stringify(updated));
       return updated;
     });
   }, []);
 
   // Sync to local storage
   useEffect(() => {
-    localStorage.setItem('wd_products', JSON.stringify(products));
+    safeStorage.setItem('wd_products', JSON.stringify(products));
   }, [products]);
 
   useEffect(() => {
-    localStorage.setItem('wd_orders', JSON.stringify(orders));
+    safeStorage.setItem('wd_orders', JSON.stringify(orders));
   }, [orders]);
 
   useEffect(() => {
-    localStorage.setItem('wd_order_no', String(orderNo));
+    safeStorage.setItem('wd_order_no', orderNo.toString());
   }, [orderNo]);
 
   useEffect(() => {
-    localStorage.setItem('wd_inventory', JSON.stringify(inventory));
+    safeStorage.setItem('wd_inventory', JSON.stringify(inventory));
   }, [inventory]);
 
   useEffect(() => {
-    localStorage.setItem('wd_coupons', JSON.stringify(coupons));
+    safeStorage.setItem('wd_coupons', JSON.stringify(coupons));
   }, [coupons]);
 
   useEffect(() => {
-    localStorage.setItem('wd_gift_cards', JSON.stringify(giftCards));
+    safeStorage.setItem('wd_gift_cards', JSON.stringify(giftCards));
   }, [giftCards]);
 
   useEffect(() => {
-    localStorage.setItem('wd_pos_users', JSON.stringify(posUsers));
+    safeStorage.setItem('wd_pos_users', JSON.stringify(posUsers));
   }, [posUsers]);
 
   useEffect(() => {
-    localStorage.setItem('wd_expenses', String(totalExpenses));
+    safeStorage.setItem('wd_expenses', totalExpenses.toString());
   }, [totalExpenses]);
 
   useEffect(() => {
-    localStorage.setItem('wd_order_stop', String(orderStopActive));
+    safeStorage.setItem('wd_order_stop', orderStopActive ? 'true' : 'false');
   }, [orderStopActive]);
 
   useEffect(() => {
-    localStorage.setItem('wd_pickup_closed', String(pickupClosed));
+    safeStorage.setItem('wd_pickup_closed', pickupClosed ? 'true' : 'false');
   }, [pickupClosed]);
 
   useEffect(() => {
-    localStorage.setItem('wd_bank_accounts', JSON.stringify(bankAccounts));
+    safeStorage.setItem('wd_cash_requests', JSON.stringify(cashRequests));
+  }, [cashRequests]);
+
+  useEffect(() => {
+    safeStorage.setItem('wd_bank_accounts', JSON.stringify(bankAccounts));
   }, [bankAccounts]);
 
   useEffect(() => {
-    localStorage.setItem('wd_bank_txs', JSON.stringify(bankTransactions));
+    safeStorage.setItem('wd_bank_txs', JSON.stringify(bankTransactions));
   }, [bankTransactions]);
 
   useEffect(() => {

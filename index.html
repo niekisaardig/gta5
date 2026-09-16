@@ -12,10 +12,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script>
+      // Automatically normalize path trailing slashes for GitHub Pages subpath hosting
+      (function() {
+        var path = window.location.pathname;
+        if (path.length > 1 && !path.endsWith('/') && !path.split('/').pop().includes('.')) {
+          window.history.replaceState(null, '', path + '/' + window.location.search + window.location.hash);
+        }
+      })();
+    </script>
   </head>
   <body class="bg-slate-900 text-slate-100 antialiased selection:bg-blue-500 selection:text-white">
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="./src/main.tsx"></script>
   </body>
 </html>
 
