@@ -295,31 +295,40 @@ export const GitHubExportModal: React.FC<GitHubExportModalProps> = ({ isOpen, on
           <div className="bg-slate-950 border border-slate-800 rounded-2xl p-5 space-y-3">
             <h3 className="font-black text-sm text-white flex items-center gap-2">
               <Github className="w-4 h-4 text-indigo-400" />
-              <span>Hoe zet je dit in GitHub en activeer je GitHub Pages?</span>
+              <span>Oplossing voor Wit Scherm op GitHub Pages:</span>
             </h3>
+
+            <div className="bg-sky-950/40 border border-sky-500/30 p-3.5 rounded-xl text-[11px] text-sky-200 space-y-1">
+              <div className="font-bold flex items-center gap-2 text-sky-300">
+                <span>💡 Waarom ontstaat een wit scherm bij direct pushen van de React broncode?</span>
+              </div>
+              <p className="leading-relaxed text-slate-300">
+                Een React Vite applicatie gebruikt TypeScript (<code className="text-sky-300">.tsx</code>) bestanden. GitHub Pages kan onbewerkte TypeScript niet direct uitvoeren. Er zijn <strong>2 eenvoudige manieren</strong> om dit op te lossen:
+              </p>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px] leading-relaxed text-slate-300">
               <div className="space-y-2 bg-slate-900/50 p-3.5 rounded-xl border border-slate-800/60">
-                <div className="font-bold text-amber-300 flex items-center gap-1.5">
-                  <span>🍔</span> Optie A: Twee aparte GitHub Repositories (Aanbevolen)
+                <div className="font-bold text-indigo-300 flex items-center gap-1.5">
+                  <span>🚀</span> Manier 1: Automatische GitHub Actions Workflow (Aanbevolen)
                 </div>
                 <ol className="list-decimal pl-4 space-y-1 text-slate-300">
-                  <li>Maak op GitHub een repository aan, bijv. <strong>werkdonalds</strong>.</li>
-                  <li>Upload <code className="text-amber-300">werkdonalds.html</code> en noem het bestand <code className="text-amber-300 font-bold">index.html</code>.</li>
-                  <li>Ga in de repository naar <strong>Settings → Pages</strong>, kies branch <strong>main</strong> en klik <strong>Save</strong>. Je Werkdonalds app is nu direct gratis online!</li>
-                  <li>Herhaal ditzelfde voor een 2e repository <strong>werkpay</strong> met <code className="text-cyan-300">werkpay.html</code> (als <code className="text-cyan-300 font-bold">index.html</code>).</li>
+                  <li>Push de gehele code naar GitHub. (Er zit nu een <code className="text-indigo-300">.github/workflows/deploy.yml</code> bestand bij).</li>
+                  <li>Ga op GitHub naar <strong>Settings → Pages</strong>.</li>
+                  <li>Onder <strong>Source</strong>, kies <strong className="text-emerald-400">GitHub Actions</strong> (in plaats van "Deploy from a branch").</li>
+                  <li>GitHub bouwt de app nu automatisch op de achtergrond. Binnen 1 minuut is de site perfect online!</li>
                 </ol>
               </div>
 
               <div className="space-y-2 bg-slate-900/50 p-3.5 rounded-xl border border-slate-800/60">
-                <div className="font-bold text-emerald-300 flex items-center gap-1.5">
-                  <span>🗄️</span> Supabase Database Koppeling
+                <div className="font-bold text-amber-300 flex items-center gap-1.5">
+                  <span>📄</span> Manier 2: Enkele Losse HTML Bestanden (Zonder Build/Node)
                 </div>
                 <ol className="list-decimal pl-4 space-y-1 text-slate-300">
-                  <li>Ga naar <a href="https://supabase.com/dashboard" target="_blank" rel="noreferrer" className="text-emerald-400 underline">supabase.com</a> en open je project.</li>
-                  <li>Klik in het menu op <strong>SQL Editor</strong> en plak de inhoud van <code className="text-emerald-300">database.sql</code>.</li>
-                  <li>Klik op de groene knop <strong>RUN</strong>. Alle tabellen, RPC betaalfuncties en realtime sync worden direct klaargezet.</li>
-                  <li>Klik in beide HTML-apps op het tandwieltje (⚙️) en vul je Supabase Project URL &amp; Anon Key in. Beide apps werken nu live samen!</li>
+                  <li>Download hierboven <code className="text-amber-300">werkdonalds.html</code> of <code className="text-cyan-300">werkpay.html</code>.</li>
+                  <li>Upload een van deze bestanden naar een nieuwe GitHub repo en noem het <code className="text-emerald-400 font-bold">index.html</code>.</li>
+                  <li>Ga naar <strong>Settings → Pages</strong>, kies branch <strong>main</strong>.</li>
+                  <li>Werkt direct 100% gegarandeerd zonder dat er een build stap nodig is!</li>
                 </ol>
               </div>
             </div>
