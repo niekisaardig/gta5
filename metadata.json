@@ -1,0 +1,8 @@
+{
+  "name": "Remix Werkdonalds POS \u0026 WerkPay Bank",
+  "description": "Geïntegreerd kassasysteem naadloos gekoppeld aan WerkPay Bank met live betalingen, keuken KDS en de open-wereld actiegame Los Werkos (GTA-stijl).",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
